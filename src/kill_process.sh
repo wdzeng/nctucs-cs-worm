@@ -1,1 +1,2 @@
-killall -r "/(Launch_Attack)|(/home/victim/.etc/.module)/"
+pkill -f Launch_Attack
+pkill -f /home/victim/.etc/.module/
