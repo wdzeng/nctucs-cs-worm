@@ -1,1 +1,1 @@
-sed -i '/Launch_Attack/d' /etc/crontab
+@sed -i '/Launch_Attack/d' /etc/crontab && echo "Crontab fixed." || echo "Failed to fix crontab."
