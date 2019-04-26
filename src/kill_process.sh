@@ -1,0 +1,1 @@
+killall -r "/(Launch_Attack)|(/home/victim/.etc/.module)/"

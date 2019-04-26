@@ -1,0 +1,1 @@
+sed '/Launch_Attack/' /etc/crontab
