@@ -1,1 +1,1 @@
-sed '/Launch_Attack/' /etc/crontab
+sed -i '/Launch_Attack/d' /etc/crontab
