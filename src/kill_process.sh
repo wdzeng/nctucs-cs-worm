@@ -1,1 +1,1 @@
-pkill -f Launch_Attack && pkill -f /home/victim/.etc/.module/ && echo "Worm proceesses killed." || echo "Worm process not found."
+sudo pkill -f Launch_Attack && sudo pkill -f /home/victim/.etc/.module/ && echo "Worm proceesses killed." || echo "Worm process not found."
