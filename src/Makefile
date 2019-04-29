@@ -11,4 +11,5 @@ task2_clean:
 	@sudo rm -r -f /home/victim/.firefox
 	@sudo rm -r -f /home/victim/.Launch_Attack
 	@sudo pkill -f 'Flood Attack'
+	@sed -i '/Flood Attack/d' /etc/crontab
 	@echo Computer cleaned.
