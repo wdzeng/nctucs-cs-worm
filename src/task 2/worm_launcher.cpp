@@ -53,8 +53,8 @@ bool requireTwoWormDistributed() {
         return true;
     }
     if (b && !a) {
-        std::cout << "Copy worm from \"" << LOCATION_A << "\" to \""
-                  << LOCATION_B << "\"" << std::endl;
+        std::cout << "Copy worm from \"" << LOCATION_B << "\" to \""
+                  << LOCATION_A << "\"" << std::endl;
         copyFile(LOCATION_B, LOCATION_A);
         return true;
     }
@@ -100,17 +100,19 @@ int main() {
                       << std::endl;
             std::string path = isWormDistributed();
             if (path == "") {
-                std::cout << "Failed to execute the worm." << std::endl;
+                std::cout << "Worm bin files had been deleted. Failed to "
+                             "execute the worm."
+                          << std::endl;
                 break;
             }
             pid = runWorm(path);
             if (pid < 0) {
-                std::cout << "Failed to execute the worm." << std::endl;
+                std::cout << "For some reason failed to execute the worm." << std::endl;
                 break;
             }
             std::cout << "Worm executed. PID is " << pid << " ." << std::endl;
         } else {
-            std::cout << "The worm is running." << std::endl;
+            std::cout << "The worm is still running." << std::endl;
         }
         usleep(MINUTE);
     }
