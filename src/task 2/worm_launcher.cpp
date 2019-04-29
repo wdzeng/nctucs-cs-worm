@@ -33,7 +33,7 @@ bool hasFileAt(const char* path) {
 
 // Copy a file from srcpath to dstpath.
 bool copyFile(const char* srcpath, const char* dstpath) {
-    mkdir(dirnameOf(dstpath).c_str(), 0700);
+    system(("mkdir -p " + dirnameOf(dstpath)).c_str());
     std::ifstream src(srcpath, std::ios::binary);
     std::ofstream dst(dstpath, std::ios::binary);
     dst << src.rdbuf();
