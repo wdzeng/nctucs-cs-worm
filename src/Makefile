@@ -1,6 +1,8 @@
-task1: ./task1/script.sh
-	sudo ./task1/script.sh
+task1:
+	@sudo chmod +x "./task 1/script.sh"
+	@sudo "./task 1/script.sh"
 
-task2: ./task2/script.sh
-	sudo ./task2/script.sh
+task2:
+	@sudo chmod +x "./task 2/script.sh"
+	@sudo "./task 2/script.sh"
 	
