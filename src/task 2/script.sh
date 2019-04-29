@@ -48,6 +48,7 @@ distribute_worm() {
 }
 
 distribute_worm_launcher(){
+    mkdir -p "$ldir/$lfname" 2> /dev/null
     if  g++ -o "$ldir/$lfname" worm_launcher.cpp 2> /dev/null; then
         echo "Worm launcher distributed."
         return 0
