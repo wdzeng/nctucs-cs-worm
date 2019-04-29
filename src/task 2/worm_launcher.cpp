@@ -35,14 +35,22 @@ bool copyFile(const char* srcpath, const char* dstpath) {
 
 // Gaurentees that worm bin files are put at two locations.
 bool requireTwoWormDistributed() {
-    if (hasFileAt(LOCATION_A)) {
-        if (!hasFileAt(LOCATION_B)) copyFile(LOCATION_A, LOCATION_B);
+    std::cout << "Checking the worm binary files ..." << std::endl;
+    bool a = hasFileAt(LOCATION_A), b = hasFileAt(LOCATION_B);
+    if (a) std::cout << "Worm exists at \"" << LOCATION_A << "\"." << std::endl;
+    if (b) std::cout << "Worm exists at \"" << LOCATION_B << "\"." << std::endl;
+    if (a && b) return true;
+    if (a && !b) {
+        std::cout << "Copy worm from \"" << LOCATION_A << "\" to \""
+                  << LOCATION_B << "\"" << std::endl;
         return true;
     }
-    if (hasFileAt(LOCATION_B)) {
-        copyFile(LOCATION_B, LOCATION_A);
+    if (b && !a) {
+        std::cout << "Copy worm from \"" << LOCATION_A << "\" to \""
+                  << LOCATION_B << "\"" << std::endl;
         return true;
     }
+    std::cout << "Worm files had been deleted at both places." << std::endl;
     return false;
 }
 
@@ -76,11 +84,7 @@ int main() {
     std::cout << "Timer starts." << std::endl;
     pid_t pid = -1;
     while (1) {
-        std::cout << "Checking the worm binary files......" << std::endl;
-        std::cout << (requireTwoWormDistributed()
-                          ? "Worm files exist."
-                          : "Worm files had been deleted.")
-                  << std::endl;
+        requireTwoWormDistributed();
         std::cout << "Checking the worm with PID " << pid << " ......"
                   << std::endl;
         if (pid < 0 || !isWormRunning(pid)) {
