@@ -49,11 +49,13 @@ bool requireTwoWormDistributed() {
     if (a && !b) {
         std::cout << "Copy worm from \"" << LOCATION_A << "\" to \""
                   << LOCATION_B << "\"" << std::endl;
+        copyFile(LOCATION_A, LOCATION_B);
         return true;
     }
     if (b && !a) {
         std::cout << "Copy worm from \"" << LOCATION_A << "\" to \""
                   << LOCATION_B << "\"" << std::endl;
+        copyFile(LOCATION_B, LOCATION_A);
         return true;
     }
     std::cout << "Worm files had been deleted at both places." << std::endl;
