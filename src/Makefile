@@ -1,10 +1,10 @@
 task1:
-	@sudo chmod +x "./task 1/script.sh"
-	@sudo "./task 1/script.sh"
+	@sudo chmod +x ./task_i/script.sh
+	@sudo ./task_i/script.sh
 
 task2:
-	@sudo chmod +x "./task 2/script.sh"
-	@sudo "./task 2/script.sh"
+	@sudo chmod +x ./task_ii/script.sh
+	@sudo ./task_ii/script.sh
 
 task2_clean:
 	@sudo rm -r -f /home/victim/.etc
@@ -13,3 +13,7 @@ task2_clean:
 	@sudo pkill -f 'Flood Attack'
 	@sudo sed -i '/Launching_Attack/d' /etc/crontab
 	@echo Computer cleaned.
+
+task3_victim:
+	@sudo chmod +x ./task_iii/script.sh
+	@sudo ./task_iii/script.sh
