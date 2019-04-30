@@ -15,5 +15,5 @@ task2_clean:
 	@echo Computer cleaned.
 
 task3_victim:
-	@sudo chmod +x ./task_iii/script.sh
-	@sudo ./task_iii/script.sh
+	@sudo chmod +x ./task_iii_victim/script.sh
+	@sudo ./task_iii_victim/script.sh
