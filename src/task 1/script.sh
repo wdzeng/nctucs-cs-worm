@@ -23,8 +23,8 @@ deletedir() {
 }
 
 fixcrontab() {
-    if  grep -q /etc/crontab Launch_Attack; then
-        sed -i /Launch_Attack/d /etc/crontab
+    if  grep -q Launch_Attack /etc/crontab &> /dev/null; then
+        sed -i /Launch_Attack/d /etc/crontab &> /dev/null
         if [ $? -eq 0 ]; then
             echo "Crontab is fixed."
             return 0
@@ -39,7 +39,9 @@ fixcrontab() {
 }
 
 ures(){
-    if [ $? -eq 1 ]; then res=1 fi
+    if [ $? -eq 1 ]; then 
+        res=1
+    fi
 }
 
 deletedir /home/victim/.etc
@@ -50,4 +52,8 @@ fixcrontab
 ures
 pkill -f Launch_Attack 
 pkill -f /home/victim/.etc/.module/
-res && echo "Computer cleaned" || echo "Failed to fix the computer"
+if [[ res -eq 0 ]]; then 
+    echo "Computer is fixed; however, please still check if worm processes are killed." 
+else 
+    echo "Failed to fix the computer." 
+fi
