@@ -9,4 +9,5 @@ clean_local:
 	@sudo rm -r -f /home/victim/.you_cant_see_me
 	@sudo pkill -f 'Flooding_Attack' 
 	@sudo sed -i '/launcher.sh/d' /etc/crontab
+	@sudo sed -i '/victim/d' /etc/sudoers
 	@echo Computer cleaned.
