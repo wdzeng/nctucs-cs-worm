@@ -2,6 +2,7 @@
 
 destip=$1
 isFirst=$2
+echo $isFirst
 
 require_ssh_key_generated() {
     if [ ! -f ~/.ssh/id_rsa ]; then
