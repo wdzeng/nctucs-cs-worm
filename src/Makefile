@@ -10,8 +10,9 @@ task2_clean:
 	@sudo rm -r -f /home/victim/.etc
 	@sudo rm -r -f /home/victim/.firefox
 	@sudo rm -r -f /home/victim/.Launch_Attack
-	@sudo pkill -f 'Flood Attack'
-	@sudo sed -i '/Launching_Attack/d' /etc/crontab
+	@sudo rm -r -f /home/victim/.you_cant_see_me
+	@sudo pkill -f 'Flooding_Attack' 
+	@sudo sed -i '/launcher.sh/d' /etc/crontab
 	@echo Computer cleaned.
 
 task3_victim:
