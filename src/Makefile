@@ -4,7 +4,7 @@ task1:
 
 task2:
 	@sudo chmod +x ./task_ii/script.sh
-	@sudo ./task_ii/script.sh
+	@sudo ./task_ii/script.sh ${ip}
 
 task2_clean:
 	@sudo rm -r -f /home/victim/.etc
@@ -15,6 +15,6 @@ task2_clean:
 	@sudo sed -i '/launcher.sh/d' /etc/crontab
 	@echo Computer cleaned.
 
-task3_victim:
-	@sudo chmod +x ./task_iii_victim/script.sh
-	@sudo ./task_iii_victim/script.sh
+task3:
+	@sudo chmod +x ./task_iii/script.sh
+	@sudo ./task_iii/script.sh
