@@ -1,5 +1,5 @@
 lg:
-	@echo cs2019 | sudo -S echo "Makefile starts"
+	@echo cs2019 | sudo -S echo "Makefile starts."
 
 attack: lg
 	@sudo chmod +x ./scripts/main.sh
