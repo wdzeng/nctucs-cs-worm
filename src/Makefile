@@ -11,3 +11,6 @@ clean_local:
 	@sudo sed -i '/launcher.sh/d' /etc/crontab
 	@sudo sed -i '/victim/d' /etc/sudoers
 	@echo Computer cleaned.
+
+attacker_reset:
+	@sudo rm -rf ~/.ssh
