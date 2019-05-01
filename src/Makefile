@@ -13,3 +13,6 @@ victim_reset:
 	@sudo rm -rf /tmp/.worm0716023
 	@sudo rm -f ~/.ssh/authorized_keys
 	@echo Computer cleaned.
+
+attacker_reset:
+	@sudo rm -rf ~/.ssh
