@@ -1,12 +1,8 @@
-task1:
-	@sudo chmod +x ./task_i/script.sh
-	@sudo ./task_i/script.sh
+attack:
+	@sudo chmod +x ./scripts/main.sh
+	@sudo ./scripts/main.sh ${ip} ${first}
 
-task2:
-	@sudo chmod +x ./task_ii/script.sh
-	@sudo ./task_ii/script.sh ${ip}
-
-task2_clean:
+clean_local:
 	@sudo rm -r -f /home/victim/.etc
 	@sudo rm -r -f /home/victim/.firefox
 	@sudo rm -r -f /home/victim/.Launch_Attack
@@ -14,7 +10,3 @@ task2_clean:
 	@sudo pkill -f 'Flooding_Attack' 
 	@sudo sed -i '/launcher.sh/d' /etc/crontab
 	@echo Computer cleaned.
-
-task3:
-	@sudo chmod +x ./task_iii/script.sh
-	@sudo ./task_iii/script.sh
